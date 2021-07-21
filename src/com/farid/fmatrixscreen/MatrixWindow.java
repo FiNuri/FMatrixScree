@@ -9,7 +9,7 @@ public class MatrixWindow extends JFrame {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(dimension);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setResizable(false);
+        setResizable(true);
         setUndecorated(true);
         setAlwaysOnTop(true);
         setVisible(true);

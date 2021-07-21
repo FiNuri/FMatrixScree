@@ -72,24 +72,23 @@ public class MatrixLogic extends JPanel implements ActionListener {
     }
 
     private void changeFirsCharOfWord() {
-        String randomChar;
         if (this.firsCharChangeTimer2 >= 3) {
-            for (MatrixWord matrixWord : verticalWordsOnScree) {
-                for (int j = 0; j < matrixWord.getMatrixChars().length; j++) {
-                    randomChar = String.valueOf(alphabet[randomizer.nextInt(alphabet.length - 1)]);
-                    matrixWord.getMatrixChars()[0].setMatrixChar(randomChar);
-                }
-            }
+            changeChar(0);
             this.firsCharChangeTimer2 = 0;
         }
         if (this.firsCharChangeTimer >= this.charChangeBound) {
-            for (MatrixWord matrixWord : verticalWordsOnScree) {
-                for (int j = 0; j < matrixWord.getMatrixChars().length; j++) {
-                    randomChar = String.valueOf(alphabet[randomizer.nextInt(alphabet.length - 1)]);
-                    matrixWord.getMatrixChars()[1].setMatrixChar(randomChar);
-                }
-            }
+            changeChar(1);
             this.firsCharChangeTimer = 0;
+        }
+    }
+
+    private void changeChar(int position) {
+        String randomChar;
+        for (MatrixWord matrixWord : verticalWordsOnScree) {
+            for (int j = 0; j < matrixWord.getMatrixChars().length; j++) {
+                randomChar = String.valueOf(alphabet[randomizer.nextInt(alphabet.length - 1)]);
+                matrixWord.getMatrixChars()[position].setMatrixChar(randomChar);
+            }
         }
     }
 
