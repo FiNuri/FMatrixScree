@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class MatrixLogic extends JPanel implements ActionListener {
@@ -22,6 +23,7 @@ public class MatrixLogic extends JPanel implements ActionListener {
     private Font matrixFont;
     private int firsCharChangeTimer;
     private int firsCharChangeTimer2;
+    private int[] yCounter;
     private final boolean started;
 
     public MatrixLogic(Dimension dimension) {
@@ -42,6 +44,7 @@ public class MatrixLogic extends JPanel implements ActionListener {
         initFont();
         initWordsCount();
         initMatrixWords();
+        initCounter();
         startRain();
     }
 
@@ -52,9 +55,9 @@ public class MatrixLogic extends JPanel implements ActionListener {
 
     private void initFont() {
         try {
-            this.matrixFont = Font.createFont(Font.TRUETYPE_FONT, this.getClass()
-                    .getResourceAsStream("font/matrixCodeNfi.ttf")).deriveFont(Font.BOLD + Font.ITALIC);
-        } catch (FontFormatException | IOException ignored) {
+            this.matrixFont = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass()
+                    .getResourceAsStream("font/matrixCodeNfi.ttf"))).deriveFont(Font.BOLD + Font.ITALIC);
+        } catch (FontFormatException | IOException | NullPointerException ignored) {
             System.exit(1);
         }
     }
@@ -93,17 +96,34 @@ public class MatrixLogic extends JPanel implements ActionListener {
     }
 
     private void moveWordsDown() {
-        int yPosition, nextYPosition, lastCharYPosition, lastCharPositionInArr;
+        int lastCharYPosition, lastCharPositionInArr, zPosition;
+        boolean[] worked = {false, false, false, false, false};
         String nextChar;
         this.firsCharChangeTimer++;
         this.firsCharChangeTimer2++;
         for (int i = 0; i < this.verticalWordsOnScree.length; i++) {
+            zPosition = this.verticalWordsOnScree[i].getzPosition();
             lastCharPositionInArr = this.verticalWordsOnScree[i].getMatrixChars().length - 1;
             lastCharYPosition = this.verticalWordsOnScree[i].getMatrixChars()[lastCharPositionInArr].getyPosition();
             for (int j = lastCharPositionInArr; j >= 0; j--) {
-                yPosition = this.verticalWordsOnScree[i].getMatrixChars()[j].getyPosition();
-                nextYPosition = yPosition + 1;
-                this.verticalWordsOnScree[i].getMatrixChars()[j].setyPosition(nextYPosition);
+                if (zPosition == 1) {
+                    moveYPositionToNext(i, j);
+                } else if (zPosition == 2 && this.yCounter[0] == 2) {
+                    moveYPositionToNext(i, j);
+                    worked[0] = true;
+                } else if (zPosition == 3 && this.yCounter[1] == 3) {
+                    moveYPositionToNext(i, j);
+                    worked[1] = true;
+                } else if (zPosition == 4 && this.yCounter[2] == 4) {
+                    moveYPositionToNext(i, j);
+                    worked[2] = true;
+                } else if (zPosition == 5 && this.yCounter[3] == 5) {
+                    moveYPositionToNext(i, j);
+                    worked[3] = true;
+                } else if (zPosition == 6 && this.yCounter[4] == 6) {
+                    moveYPositionToNext(i, j);
+                    worked[4] = true;
+                }
                 if (this.firsCharChangeTimer >= this.charChangeBound) {
                     if (j - 1 > 0) {
                         nextChar = this.verticalWordsOnScree[i].getMatrixChars()[j - 1].getMatrixChar();
@@ -115,6 +135,28 @@ public class MatrixLogic extends JPanel implements ActionListener {
                 changeMatrixWordToNew(i);
             }
         }
+        nullifyCounter(worked);
+        increaseYCounter();
+    }
+
+    private void increaseYCounter() {
+        for (int i = 0; i < this.yCounter.length; i++) {
+            this.yCounter[i] = this.yCounter[i] + 1;
+        }
+    }
+
+    private void nullifyCounter(boolean[] worked) {
+        for (int i = 0; i < worked.length; i++) {
+            if (worked[i]) {
+                this.yCounter[i] = 1;
+            }
+        }
+    }
+
+    private void moveYPositionToNext(int wordNumber, int charNumber) {
+        int yPosition = this.verticalWordsOnScree[wordNumber].getMatrixChars()[charNumber].getyPosition();
+        int nextYPosition = yPosition + 1;
+        this.verticalWordsOnScree[wordNumber].getMatrixChars()[charNumber].setyPosition(nextYPosition);
     }
 
     @Override
@@ -175,13 +217,14 @@ public class MatrixLogic extends JPanel implements ActionListener {
         } else {
             matrixWord.setxPosition(0);
         }
-        matrixWord.setzPosition(this.randomizer.nextInt(5) + 1);
-        matrixWord.setMatrixChars(generateChars());
+        int zPosition = this.randomizer.nextInt(5) + 1;
+        matrixWord.setzPosition(zPosition);
+        matrixWord.setMatrixChars(generateChars(zPosition));
         return matrixWord;
     }
 
 
-    private MatrixChar[] generateChars() {
+    private MatrixChar[] generateChars(int zPosition) {
         Color color = null;
         int wordLength = this.randomizer.nextInt(93) + 7;
         int startYPosition = 1;
@@ -203,27 +246,56 @@ public class MatrixLogic extends JPanel implements ActionListener {
                 startYPosition -= 16;
             }
             if (i == 0) {
-                color = this.colorHolder.getColors()[0];
+                color = retrieveColor(zPosition, 0);
             } else if (i < beginColor2) {
-                color = this.colorHolder.getColors()[1];
+                color = retrieveColor(zPosition, 1);
             } else if (i < beginColor3) {
-                color = this.colorHolder.getColors()[2];
+                color = retrieveColor(zPosition, 2);
             } else if (i < middleColor) {
-                color = this.colorHolder.getColors()[3];
-            } else if (i >= middleColor && i < endColor1) {
-                color = this.colorHolder.getColors()[4];
-            } else if (i >= endColor1 && i < endColor2) {
-                color = this.colorHolder.getColors()[5];
-            } else if (i >= endColor2 && i < endColor3) {
-                color = this.colorHolder.getColors()[6];
+                color = retrieveColor(zPosition, 3);
+            } else if (i < endColor1) {
+                color = retrieveColor(zPosition, 4);
+            } else if (i < endColor2) {
+                color = retrieveColor(zPosition, 5);
+            } else if (i < endColor3) {
+                color = retrieveColor(zPosition, 6);
             } else if (i >= endColor3) {
-                color = this.colorHolder.getColors()[7];
+                color = retrieveColor(zPosition, 7);
             }
             matrixChar.setyPosition(startYPosition);
             matrixChar.setCharColor(color);
             wordChars[i] = matrixChar;
         }
         return wordChars;
+    }
+
+    private Color retrieveColor(int zPosition, int colorNumber) {
+        Color color = null;
+        switch (zPosition) {
+            case 1:
+                color = this.colorHolder.getColorsZ1()[colorNumber];
+                break;
+            case 2:
+                color = this.colorHolder.getColorsZ2()[colorNumber];
+                break;
+            case 3:
+                color = this.colorHolder.getColorsZ3()[colorNumber];
+                break;
+            case 4:
+                color = this.colorHolder.getColorsZ4()[colorNumber];
+                break;
+            case 5:
+                color = this.colorHolder.getColorsZ5()[colorNumber];
+                break;
+            case 6:
+                color = this.colorHolder.getColorsZ6()[colorNumber];
+                break;
+        }
+        return color;
+    }
+
+    private void initCounter() {
+        this.yCounter = new int[]{1, 1, 1, 1, 1};
     }
 
     private void closeScreen() {
