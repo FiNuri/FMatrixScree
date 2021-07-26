@@ -13,7 +13,7 @@ public class ColorHolder {
     public ColorHolder() {
         this.colorsZ1 = new Color[]{
                 new Color(233, 255, 236),
-                new Color(182, 250, 193),
+                new Color(143, 241, 161),
                 new Color(59, 255, 115),
                 new Color(0, 255, 65),
                 new Color(0, 143, 17),
@@ -23,7 +23,7 @@ public class ColorHolder {
         };
         this.colorsZ2 = new Color[]{
                 new Color(233, 255, 236, 230),
-                new Color(182, 250, 193, 230),
+                new Color(143, 241, 161, 230),
                 new Color(59, 255, 115, 230),
                 new Color(0, 255, 65, 230),
                 new Color(0, 143, 17, 230),
@@ -33,7 +33,7 @@ public class ColorHolder {
         };
         this.colorsZ3 = new Color[]{
                 new Color(233, 255, 236, 153),
-                new Color(182, 250, 193, 153),
+                new Color(143, 241, 161, 153),
                 new Color(59, 255, 115, 153),
                 new Color(0, 255, 65, 153),
                 new Color(0, 143, 17, 153),
@@ -43,7 +43,7 @@ public class ColorHolder {
         };
         this.colorsZ4 = new Color[]{
                 new Color(233, 255, 236, 128),
-                new Color(182, 250, 193, 128),
+                new Color(143, 241, 161, 128),
                 new Color(59, 255, 115, 128),
                 new Color(0, 255, 65, 128),
                 new Color(0, 143, 17, 128),
@@ -53,7 +53,7 @@ public class ColorHolder {
         };
         this.colorsZ5 = new Color[]{
                 new Color(233, 255, 236, 153),
-                new Color(182, 250, 193, 153),
+                new Color(143, 241, 161, 153),
                 new Color(59, 255, 115, 153),
                 new Color(0, 255, 65, 153),
                 new Color(0, 143, 17, 153),
@@ -63,7 +63,7 @@ public class ColorHolder {
         };
         this.colorsZ6 = new Color[]{
                 new Color(233, 255, 236, 128),
-                new Color(182, 250, 193, 128),
+                new Color(143, 241, 161, 128),
                 new Color(59, 255, 115, 128),
                 new Color(0, 255, 65, 128),
                 new Color(0, 143, 17, 128),
