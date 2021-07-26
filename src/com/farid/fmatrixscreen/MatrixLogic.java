@@ -36,7 +36,7 @@ public class MatrixLogic extends JPanel implements ActionListener {
         this.firsCharChangeTimer = 0;
         this.firsCharChangeTimer2 = 0;
         this.charChangeBound = 6;
-        this.cellLength = 12;
+        this.cellLength = 10;
         this.alphabet = new MatrixAlphabet().getAlphabet();
         this.colorHolder = new ColorHolder();
         this.started = true;
@@ -56,7 +56,7 @@ public class MatrixLogic extends JPanel implements ActionListener {
     private void initFont() {
         try {
             this.matrixFont = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(this.getClass()
-                    .getResourceAsStream("font/matrixCodeNfi.ttf"))).deriveFont(Font.BOLD + Font.ITALIC);
+                    .getResourceAsStream("font/matrixCodeNfi.ttf"))).deriveFont(Font.BOLD);
         } catch (FontFormatException | IOException | NullPointerException ignored) {
             System.exit(1);
         }
@@ -148,14 +148,14 @@ public class MatrixLogic extends JPanel implements ActionListener {
     private void nullifyCounter(boolean[] worked) {
         for (int i = 0; i < worked.length; i++) {
             if (worked[i]) {
-                this.yCounter[i] = 1;
+                this.yCounter[i] = 0;
             }
         }
     }
 
     private void moveYPositionToNext(int wordNumber, int charNumber) {
         int yPosition = this.verticalWordsOnScree[wordNumber].getMatrixChars()[charNumber].getyPosition();
-        int nextYPosition = yPosition + 1;
+        int nextYPosition = yPosition + 2;
         this.verticalWordsOnScree[wordNumber].getMatrixChars()[charNumber].setyPosition(nextYPosition);
     }
 
@@ -179,22 +179,22 @@ public class MatrixLogic extends JPanel implements ActionListener {
         Font font = null;
         switch (ZPosition) {
             case 1:
-                font = this.matrixFont.deriveFont(16f);
+                font = this.matrixFont.deriveFont(20f);
                 break;
             case 2:
-                font = this.matrixFont.deriveFont(14f);
+                font = this.matrixFont.deriveFont(18f);
                 break;
             case 3:
-                font = this.matrixFont.deriveFont(12f);
+                font = this.matrixFont.deriveFont(16f);
                 break;
             case 4:
-                font = this.matrixFont.deriveFont(10f);
+                font = this.matrixFont.deriveFont(14f);
                 break;
             case 5:
-                font = this.matrixFont.deriveFont(8f);
+                font = this.matrixFont.deriveFont(12f);
                 break;
             case 6:
-                font = this.matrixFont.deriveFont(6f);
+                font = this.matrixFont.deriveFont(10f);
                 break;
         }
         return font;
@@ -241,9 +241,21 @@ public class MatrixLogic extends JPanel implements ActionListener {
         endColor3 = endColor2 + thirdOfThird;
         for (int i = 0; i < wordChars.length; i++) {
             MatrixChar matrixChar = new MatrixChar();
-            matrixChar.setMatrixChar("1");
+            matrixChar.setMatrixChar("@");
             if (i > 0) {
-                startYPosition -= 16;
+                if (zPosition == 1) {
+                    startYPosition -= 20;
+                } else if (zPosition == 2) {
+                    startYPosition -= 18;
+                } else if (zPosition == 3) {
+                    startYPosition -= 16;
+                } else if (zPosition == 4) {
+                    startYPosition -= 14;
+                } else if (zPosition == 5) {
+                    startYPosition -= 12;
+                } else if (zPosition == 6) {
+                    startYPosition -= 10;
+                }
             }
             if (i == 0) {
                 color = retrieveColor(zPosition, 0);
@@ -295,7 +307,7 @@ public class MatrixLogic extends JPanel implements ActionListener {
     }
 
     private void initCounter() {
-        this.yCounter = new int[]{1, 1, 1, 1, 1};
+        this.yCounter = new int[]{0, 0, 0, 0, 0};
     }
 
     private void closeScreen() {
